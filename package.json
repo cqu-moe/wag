@@ -1,0 +1,23 @@
+{
+  "name": "cqu-weighted-average",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest run",
+    "build": "tsc --noEmit && vite build",
+    "check": "pnpm test && pnpm build",
+    "deploy:workers": "pnpm build && wrangler deploy",
+    "deploy:pages": "pnpm build && wrangler pages deploy dist"
+  },
+  "dependencies": {
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "vite": "latest",
+    "vitest": "latest",
+    "wrangler": "latest"
+  }
+}
