@@ -19,8 +19,15 @@ app.innerHTML = `
     <section class="upload-view" id="upload-view">
       <h1 class="visually-hidden">重庆大学各学期加权平均分</h1>
       <label class="upload-box" for="transcript" id="drop-zone">
-        <span class="upload-title" id="upload-action">把成绩表拖进来</span>
-        <span class="upload-hint" id="upload-hint">或点击选择 .xls / .xlsx 文件</span>
+        <span class="upload-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M6.5 3.5h8l3 3v14h-11z" />
+            <path d="M14.5 3.5v3h3M9 10h6M9 13.5h6M9 17h4" />
+          </svg>
+        </span>
+        <span class="upload-title" id="upload-action">拖入成绩表</span>
+        <span class="upload-hint" id="upload-hint">点击选择，或直接拖入 .xls / .xlsx</span>
+        <span class="upload-choose">选择文件</span>
       </label>
 
       <div class="error-message" id="error-message" role="alert" hidden>
@@ -38,43 +45,49 @@ app.innerHTML = `
         <label class="replace-file" for="transcript">重新选择</label>
       </header>
 
+      <div class="term-columns" aria-hidden="true">
+        <span>学期</span>
+        <span>加权平均分</span>
+      </div>
       <ul class="term-list" id="term-list"></ul>
       <p class="warning-message" id="warning-message" role="status" hidden></p>
 
       <section class="method" aria-labelledby="method-title">
         <h2 id="method-title">计算方式</h2>
-        <math
-          class="formula"
-          display="block"
-          aria-label="每学期加权平均分等于各课程成绩乘学分之和除以各课程学分之和"
-        >
-          <mrow>
-            <msub>
-              <mover><mi>x</mi><mo>¯</mo></mover>
-              <mtext>学期</mtext>
-            </msub>
-            <mo>=</mo>
-            <mfrac>
-              <mrow>
-                <munderover>
-                  <mo>∑</mo>
-                  <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
-                  <mi>n</mi>
-                </munderover>
-                <msub><mi>s</mi><mi>i</mi></msub>
-                <msub><mi>c</mi><mi>i</mi></msub>
-              </mrow>
-              <mrow>
-                <munderover>
-                  <mo>∑</mo>
-                  <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
-                  <mi>n</mi>
-                </munderover>
-                <msub><mi>c</mi><mi>i</mi></msub>
-              </mrow>
-            </mfrac>
-          </mrow>
-        </math>
+        <div class="formula-panel">
+          <math
+            class="formula"
+            display="block"
+            aria-label="每学期加权平均分等于各课程成绩乘学分之和除以各课程学分之和"
+          >
+            <mrow>
+              <msub>
+                <mover><mi>x</mi><mo>¯</mo></mover>
+                <mtext>学期</mtext>
+              </msub>
+              <mo>=</mo>
+              <mfrac>
+                <mrow>
+                  <munderover>
+                    <mo>∑</mo>
+                    <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                    <mi>n</mi>
+                  </munderover>
+                  <msub><mi>s</mi><mi>i</mi></msub>
+                  <msub><mi>c</mi><mi>i</mi></msub>
+                </mrow>
+                <mrow>
+                  <munderover>
+                    <mo>∑</mo>
+                    <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                    <mi>n</mi>
+                  </munderover>
+                  <msub><mi>c</mi><mi>i</mi></msub>
+                </mrow>
+              </mfrac>
+            </mrow>
+          </math>
+        </div>
         <p class="method-note">
           <var>s<sub>i</sub></var> 为百分制成绩，<var>c<sub>i</sub></var> 为学分。0 学分课程不计入，等级制成绩先换算为百分制。
           <a href="https://jwc.cqu.edu.cn/info/1075/1011.htm" target="_blank" rel="noreferrer">查看换算规则</a>
@@ -116,7 +129,7 @@ function resetFeedback(): void {
 function showError(message: string): void {
   resultArea.hidden = true
   uploadView.hidden = false
-  uploadAction.textContent = "把成绩表拖进来"
+  uploadAction.textContent = "拖入成绩表"
   errorText.textContent = message
   errorMessage.hidden = false
   dropZone.classList.add("has-error")
@@ -151,7 +164,7 @@ function renderResult(result: CalculationResult, uploadedFileName: string): void
 
   uploadView.hidden = true
   resultArea.hidden = false
-  uploadAction.textContent = "把成绩表拖进来"
+  uploadAction.textContent = "拖入成绩表"
   resultTitle.focus()
 }
 

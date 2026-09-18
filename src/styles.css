@@ -5,16 +5,20 @@
     sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
   --canvas: #fff;
   --surface: #fff;
-  --ink: #111;
-  --muted: #666;
-  --accent: #111;
-  --accent-soft: #f5f5f5;
-  --border: #777;
-  --border-subtle: #ddd;
-  --error: #111;
-  --error-soft: #f5f5f5;
+  --ink: #0a0a0a;
+  --muted: #6b6b6b;
+  --accent: #0a0a0a;
+  --accent-soft: #f6f6f6;
+  --border: #b8b8b8;
+  --border-subtle: #e8e8e8;
+  --error: #0a0a0a;
+  --error-soft: #f6f6f6;
 }
 
 html {
@@ -52,8 +56,8 @@ a:hover {
 }
 
 ::selection {
-  color: var(--surface);
-  background: var(--accent);
+  color: var(--ink);
+  background: #dedede;
 }
 
 [hidden] {
@@ -74,7 +78,7 @@ a:hover {
 }
 
 .page-shell {
-  width: min(calc(100% - 2rem), 44rem);
+  width: min(calc(100% - 2rem), 46rem);
   margin-inline: auto;
 }
 
@@ -94,29 +98,36 @@ a:hover {
 .upload-box {
   box-sizing: border-box;
   display: grid;
-  min-height: clamp(16rem, 52dvh, 22rem);
+  min-height: clamp(20rem, 58dvh, 27rem);
   place-content: center;
-  gap: 0.35rem;
-  padding: 2rem;
+  justify-items: center;
+  gap: 0;
+  padding: clamp(2rem, 7vw, 4rem);
   color: var(--ink);
   text-align: center;
   background: var(--surface);
-  border: 0.125rem dashed var(--border);
-  border-radius: 0.75rem;
+  border: 0.0625rem solid var(--border);
+  border-radius: 1rem;
   cursor: pointer;
   transition:
     background-color 150ms ease-out,
-    border-color 150ms ease-out;
+    border-color 150ms ease-out,
+    transform 150ms ease-out;
 }
 
-.upload-box:hover,
-.upload-box.is-dragging {
+.upload-box:hover {
   background: var(--accent-soft);
   border-color: var(--accent);
 }
 
 .upload-box:active {
-  border-style: solid;
+  transform: scale(0.99);
+}
+
+.upload-box.is-dragging {
+  color: var(--surface);
+  background: var(--ink);
+  border-color: var(--ink);
 }
 
 .upload-box.has-error {
@@ -125,11 +136,44 @@ a:hover {
 }
 
 .upload-title {
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 700;
+  margin-block-start: 1.4rem;
+  font-size: clamp(1.65rem, 4vw, 2.15rem);
+  font-weight: var(--font-weight-bold);
   line-height: 1.25;
   letter-spacing: -0.025em;
   text-wrap: balance;
+}
+
+.upload-mark {
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  place-items: center;
+  color: var(--surface);
+  background: var(--ink);
+  border-radius: 0.75rem;
+  transition:
+    color 150ms ease-out,
+    background-color 150ms ease-out,
+    transform 150ms ease-out;
+}
+
+.upload-mark svg {
+  width: 1.65rem;
+  height: 1.65rem;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.upload-box:hover .upload-mark {
+  transform: translateY(-0.125rem);
+}
+
+.upload-box.is-dragging .upload-mark {
+  color: var(--ink);
+  background: var(--surface);
 }
 
 .upload-hint,
@@ -139,7 +183,31 @@ a:hover {
 }
 
 .upload-hint {
+  margin-block-start: 0.35rem;
   font-size: 0.9rem;
+}
+
+.upload-choose {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  margin-block-start: 1.5rem;
+  padding-inline: 1.1rem;
+  color: var(--surface);
+  background: var(--ink);
+  border: 0.0625rem solid var(--ink);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  transition:
+    color 150ms ease-out,
+    background-color 150ms ease-out;
+}
+
+.upload-box.is-dragging .upload-choose {
+  color: var(--ink);
+  background: var(--surface);
 }
 
 .error-message {
@@ -184,12 +252,13 @@ a:hover {
   align-items: end;
   justify-content: space-between;
   gap: 1.5rem;
-  padding-block-end: 1.25rem;
-  border-block-end: 0.125rem solid var(--ink);
+  padding-block-end: 1.5rem;
+  border-block-end: 0.0625rem solid var(--ink);
 }
 
 .result-header h1 {
-  font-size: clamp(1.85rem, 5vw, 2.6rem);
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: var(--font-weight-bold);
   line-height: 1.12;
   letter-spacing: -0.04em;
   text-wrap: balance;
@@ -200,6 +269,7 @@ a:hover {
   margin-block-end: 0.35rem !important;
   overflow: hidden;
   font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -213,17 +283,24 @@ a:hover {
   padding-inline: 0.9rem;
   color: var(--ink);
   background: transparent;
-  border: 0.0625rem solid var(--border);
-  border-radius: 0.375rem;
+  border: 0.0625rem solid var(--ink);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition:
+    color 150ms ease-out,
     background-color 150ms ease-out,
-    border-color 150ms ease-out;
+    transform 150ms ease-out;
 }
 
 .replace-file:hover {
-  background: var(--surface);
-  border-color: var(--ink);
+  color: var(--surface);
+  background: var(--ink);
+}
+
+.replace-file:active {
+  transform: scale(0.96);
 }
 
 .file-input:focus-visible ~ .result-view .replace-file {
@@ -231,9 +308,25 @@ a:hover {
   outline-offset: 0.1875rem;
 }
 
+.term-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  margin-block-start: 2.5rem;
+  padding-block-end: 0.55rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+}
+
+.term-columns span:last-child {
+  text-align: end;
+}
+
 .term-list {
   padding: 0;
-  margin: 2rem 0 0;
+  margin: 0;
   list-style: none;
   border-block-end: 0.0625rem solid var(--border-subtle);
 }
@@ -243,17 +336,20 @@ a:hover {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: baseline;
   gap: 1.5rem;
-  padding-block: 1.15rem;
+  min-height: 4.75rem;
+  padding-block: 1.25rem;
   border-block-start: 0.0625rem solid var(--border-subtle);
 }
 
 .term-name {
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: var(--font-weight-semibold);
+  text-wrap: pretty;
 }
 
 .term-score {
-  font-size: clamp(1.75rem, 6vw, 2.5rem);
-  font-weight: 700;
+  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  font-weight: var(--font-weight-bold);
   font-variant-numeric: tabular-nums;
   line-height: 1;
   letter-spacing: -0.035em;
@@ -269,21 +365,32 @@ a:hover {
 
 .method {
   margin-block-start: clamp(3rem, 8vw, 5rem);
-  padding-block-start: 1.25rem;
-  border-block-start: 0.0625rem solid var(--border-subtle);
 }
 
 .method h2 {
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 0.78rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.08em;
+}
+
+.formula-panel {
+  box-sizing: border-box;
+  display: grid;
+  min-height: 9rem;
+  place-items: center;
+  margin-block: 0.8rem 1rem;
+  padding: 1.5rem;
+  background: var(--accent-soft);
+  border: 0.0625rem solid var(--border-subtle);
+  border-radius: 0.75rem;
 }
 
 .formula {
-  margin-block: 1.1rem 0.85rem;
+  margin: 0;
   font-family: "STIX Two Math", "Times New Roman", serif;
-  font-size: clamp(1.25rem, 4vw, 1.65rem);
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
   font-variant-numeric: tabular-nums;
-  text-align: start;
+  text-align: center;
 }
 
 .method-note {
@@ -299,7 +406,7 @@ a:hover {
 
 @media (max-width: 32rem) {
   .page-shell {
-    width: min(calc(100% - 1.25rem), 44rem);
+    width: min(calc(100% - 1.25rem), 46rem);
   }
 
   .result-header {
@@ -308,6 +415,11 @@ a:hover {
 
   .result-file {
     max-width: 12rem;
+  }
+
+  .upload-box {
+    min-height: 24rem;
+    padding-inline: 1.5rem;
   }
 }
 
@@ -319,6 +431,8 @@ a:hover {
 
 @media (prefers-reduced-motion: reduce) {
   .upload-box,
+  .upload-mark,
+  .upload-choose,
   .replace-file {
     transition: none;
   }
