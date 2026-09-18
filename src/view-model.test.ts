@@ -52,18 +52,14 @@ describe("isSupportedWorkbook", () => {
 })
 
 describe("buildResultViewModel", () => {
-  test("formats transcript totals without losing source precision", () => {
+  test("returns only the per-term summaries shown on the result screen", () => {
     const view = buildResultViewModel(result)
 
-    expect(view.overall).toEqual({
-      label: "全部学期",
-      average: "92.3",
-      detail: "60 学分 · 28 门课程",
+    expect(view).toEqual({
+      terms: [
+        { label: "2026春", average: "92.2" },
+        { label: "2025秋", average: "92.4" },
+      ],
     })
-    expect(view.terms).toEqual([
-      { label: "2026春", average: "92.2", detail: "34 学分 · 16 门课程" },
-      { label: "2025秋", average: "92.4", detail: "26 学分 · 12 门课程" },
-    ])
-    expect(view.excludedCount).toBe(1)
   })
 })
